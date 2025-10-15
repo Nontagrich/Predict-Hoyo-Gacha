@@ -176,7 +176,8 @@ export default function HoyoGachaFortune() {
           <div className="text-center space-y-8">
             <div className="space-y-4">
               <h1 className="text-6xl md:text-8xl font-bold text-white tracking-wider">
-                LET'S MOO
+                {/* --- 📝 FIX: Replaced ' with &apos; to fix ESLint error --- */}
+                LET&apos;S MOO
               </h1>
               <h1 className="text-6xl md:text-8xl font-bold text-white tracking-wider">
                 TOGETHER
