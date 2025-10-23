@@ -14,7 +14,7 @@ export default function HoyoGachaFortune() {
       id: 'genshin', 
       name: 'Genshin Impact', 
       color: 'from-blue-400 to-purple-500',
-      currentBanners: ['Flins', 'Yelan']
+      currentBanners: ['Nefer', 'Furina']
     },
     { 
       id: 'starrail', 
