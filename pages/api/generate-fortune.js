@@ -39,6 +39,13 @@ async function getZZZActiveNames() {
     
     // Find all tables and look for "Rate-Up Agents" row (get 2 most recent tables)
     $('table').each((_, table) => {
+      // Check if this table contains "Collab" text anywhere
+      const tableText = $(table).text();
+      if (tableText.toLowerCase().includes('collab')) {
+        console.log('Skipping table containing "Collab"');
+        return; // Skip this entire table
+      }
+      
       $(table).find('tr').each((_, tr) => {
         const th = $(tr).find('th').first();
         const thText = th.text().trim();
@@ -189,24 +196,41 @@ async function getHSRActiveNames() {
       const firstCol = $(tds[0]).text().trim();
       if (!firstCol.includes('(Current)')) return;
 
-      // Extract character names from second column
-      $(tds[1]).find('a').each((_, a) => {
-        const rawText = $(a).text().trim();
-        if (!rawText) return;
-
-        // Remove everything after '(' 
-        const name = rawText.split('(')[0].trim();
-
-        // Skip if it's an element/path/banned token
-        if (HSR_ELEMENTS.has(name) || HSR_PATHS.has(name)) return;
-        if ([...GENERIC_BANNED_TOKENS].some(tok => name.toLowerCase().includes(tok.toLowerCase()))) return;
-
-        if (name && !names.includes(name)) {
-          names.push(name);
+      // Split the second column by <hr> or sections containing "Collab"
+      const secondCol = $(tds[1]);
+      const html = secondCol.html();
+      
+      // Split content by <hr> tag
+      const sections = html.split(/<hr[^>]*>/);
+      
+      // Process only sections that don't contain "Collab"
+      sections.forEach((section) => {
+        if (section.toLowerCase().includes('collab')) {
+          console.log('Skipping Collab section in HSR');
+          return; // Skip this section
         }
+        
+        // Parse this section for character names
+        const $section = $(`<div>${section}</div>`);
+        $section.find('a').each((_, a) => {
+          const rawText = $(a).text().trim();
+          if (!rawText) return;
+
+          // Remove everything after '(' 
+          const name = rawText.split('(')[0].trim();
+
+          // Skip if it's an element/path/banned token
+          if (HSR_ELEMENTS.has(name) || HSR_PATHS.has(name)) return;
+          if ([...GENERIC_BANNED_TOKENS].some(tok => name.toLowerCase().includes(tok.toLowerCase()))) return;
+
+          if (name && !names.includes(name)) {
+            names.push(name);
+          }
+        });
       });
     });
 
+    console.log('Final HSR characters:', names);
     return names;
   } catch (error) {
     console.error('Error scraping Game8:', error);
