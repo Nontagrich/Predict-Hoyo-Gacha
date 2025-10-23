@@ -13,20 +13,17 @@ export default function HoyoGachaFortune() {
     { 
       id: 'genshin', 
       name: 'Genshin Impact', 
-      color: 'from-blue-400 to-purple-500',
-      currentBanners: ['Nefer', 'Furina']
+      color: 'from-blue-400 to-purple-500'
     },
     { 
       id: 'starrail', 
       name: 'Honkai: Star Rail', 
-      color: 'from-yellow-400 to-pink-500',
-      currentBanners: ['Dan Heng Permansor Terrae Form', 'Anaxa']
+      color: 'from-yellow-400 to-pink-500'
     },
     { 
       id: 'zzz', 
       name: 'Zenless Zone Zero', 
-      color: 'from-orange-400 to-red-500',
-      currentBanners: ['Lucia', 'Vivian']
+      color: 'from-orange-400 to-red-500'
     }
   ];
 
@@ -41,72 +38,28 @@ export default function HoyoGachaFortune() {
         throw new Error(`Game with id "${gameId}" not found.`);
       }
 
-      const date = new Date(birthDate);
-      const thaiDate = date.toLocaleDateString('th-TH', { 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
-      });
-
-      // Create prompt for Gemini
-      const promptText = [
-        `You are an expert fortune teller specializing in gacha luck prediction for ${selectedGameData.name}.`,
-        ``,
-        `User Information:`,
-        `- Birth Date: ${thaiDate}`,
-        `- Selected Game: ${selectedGameData.name}`,
-        `- Current Banner Characters: ${selectedGameData.currentBanners.join(', ')}`,
-        ``,
-        `Please create a fortune table for gacha pulls in JSON format:`,
-        ``,
-        `{`,
-        `  "luckyDays": [`,
-        `    {`,
-        `      "date": "Recommended date (YYYY-MM-DD)",`,
-        `      "time": "Time range (HH:MM-HH:MM)",`,
-        `      "character": "MUST be one of: ${selectedGameData.currentBanners.join(', ')}",`,
-        `      "luck": Luck level 1-100,`,
-        `      "reason": "Brief Thai reason why this is suitable"`,
-        `    }`,
-        `  ],`,
-        `  "element": "Lucky element (Hydro/Pyro/Cryo/Electro/Anemo/Geo/Dendro or Physical/Quantum/Imaginary/Wind/Fire/Ice/Lightning or Physical/Electric/Fire/Ice/Ether)",`,
-        `  "luckyNumber": Lucky number 1-90,`,
-        `  "advice": "Thai advice from the stars (1-2 sentences)",`,
-        `  "weeklyPrediction": "Overall Thai luck prediction for this week"`,
-        `}`,
-        ``,
-        `IMPORTANT: Each "character" field MUST contain ONLY ONE character name from this list: ${selectedGameData.currentBanners.join(', ')}`,
-        `Create 4-5 recommended dates within the next 2 weeks. Dates must be real dates after today (October 15, 2025) and times must be reasonable.`,
-        `Distribute the characters across different lucky days.`,
-        ``,
-        `Respond ONLY with valid JSON, no additional explanation. All Thai text should use proper UTF-8 encoding.`
-      ].join('\n');
-      
-      const prompt = promptText;
-
-      // Call Gemini API
+      // ✅ ไม่ต้องส่ง currentBanners - ให้ API ดึงเอง
       const response = await fetch('/api/generate-fortune', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          prompt,
           birthDate,
-          game: gameId,
-          currentBanners: selectedGameData.currentBanners
+          game: gameId
         }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to generate fortune');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to generate fortune');
       }
 
       const data = await response.json();
       setFortune(data.fortune);
       setStep(3);
     } catch (err) {
-      setError('เกิดข้อผิดพลาดในการสร้างตารางโชคลาภ กรุณาลองใหม่อีกครั้ง');
+      setError(err.message || 'เกิดข้อผิดพลาดในการสร้างตารางโชคลาภ กรุณาลองใหม่อีกครั้ง');
       console.error('Error generating fortune:', err);
     } finally {
       setLoading(false);
@@ -176,7 +129,6 @@ export default function HoyoGachaFortune() {
           <div className="text-center space-y-8">
             <div className="space-y-4">
               <h1 className="text-6xl md:text-8xl font-bold text-white tracking-wider">
-                {/* --- 📝 FIX: Replaced ' with &apos; to fix ESLint error --- */}
                 LET&apos;S MOO
               </h1>
               <h1 className="text-6xl md:text-8xl font-bold text-white tracking-wider">
@@ -266,6 +218,12 @@ export default function HoyoGachaFortune() {
                 ตารางโชคลาภของคุณ
               </h2>
               <p className="text-white/70">สำหรับ {games.find(g => g.id === selectedGame)?.name}</p>
+              {/* ✅ แสดง current banners ที่ดึงมาจาก API */}
+              {fortune.currentBanners && (
+                <p className="text-white/60 text-sm mt-2">
+                  🎯 Current Banners: {fortune.currentBanners.join(', ')}
+                </p>
+              )}
             </div>
 
             {/* Lucky Stats */}
