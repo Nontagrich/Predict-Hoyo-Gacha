@@ -1,6 +1,6 @@
 // pages/api/generate-fortune.js
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import * as cheerio from 'cheerio';
+import { load } from 'cheerio';
 
 // ────────────── Constants ──────────────
 const GAME8_HSR_URL = "https://game8.co/games/Honkai-Star-Rail/archives/408381";
@@ -32,7 +32,7 @@ async function getZZZActiveNames() {
     }
 
     const html = await response.text();
-    const $ = cheerio.load(html);
+    const $ = load(html);
     
     const names = [];
     let tablesFound = 0;
@@ -107,7 +107,7 @@ async function getGenshinActiveNames() {
     }
 
     const html = await response.text();
-    const $ = cheerio.load(html);
+    const $ = load(html);
     
     const names = [];
     
@@ -169,7 +169,7 @@ async function getHSRActiveNames() {
     }
 
     const html = await response.text();
-    const $ = cheerio.load(html);
+    const $ = load(html);
     
     const names = [];
     
