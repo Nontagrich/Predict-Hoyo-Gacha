@@ -26,7 +26,7 @@ export default function HoyoGachaFortune() {
       id: 'zzz', 
       name: 'Zenless Zone Zero', 
       color: 'from-blue-600 via-indigo-600 to-purple-600',
-      image: '/images/zzz.png' // วางไฟล์ zzz.jpg ในโฟลเดอร์ public/images/
+      image: '/images/zzz.jpg' // วางไฟล์ zzz.jpg ในโฟลเดอร์ public/images/
     }
   ];
 
