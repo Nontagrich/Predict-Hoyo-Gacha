@@ -13,17 +13,20 @@ export default function HoyoGachaFortune() {
     { 
       id: 'genshin', 
       name: 'Genshin Impact', 
-      color: 'from-purple-600 via-blue-600 to-cyan-500'
+      color: 'from-purple-600 via-blue-600 to-cyan-500',
+      image: '/images/genshin.jpg' // วางไฟล์ genshin.jpg ในโฟลเดอร์ public/images/
     },
     { 
       id: 'starrail', 
       name: 'Honkai: Star Rail', 
-      color: 'from-indigo-600 via-purple-600 to-pink-500'
+      color: 'from-indigo-600 via-purple-600 to-pink-500',
+      image: '/images/starrail.png' // วางไฟล์ starrail.jpg ในโฟลเดอร์ public/images/
     },
     { 
       id: 'zzz', 
       name: 'Zenless Zone Zero', 
-      color: 'from-blue-600 via-indigo-600 to-purple-600'
+      color: 'from-blue-600 via-indigo-600 to-purple-600',
+      image: '/images/zzz.png' // วางไฟล์ zzz.jpg ในโฟลเดอร์ public/images/
     }
   ];
 
@@ -188,23 +191,49 @@ export default function HoyoGachaFortune() {
                 <button
                   key={game.id}
                   onClick={() => handleGameSelect(game.id)}
-                  className="group relative aspect-square rounded-3xl overflow-hidden transform hover:scale-105 transition-all duration-300 shadow-xl shadow-purple-900/50 hover:shadow-2xl hover:shadow-cyan-500/50 bg-slate-800/50 backdrop-blur-sm border border-purple-500/30"
+                  className="group relative w-80 aspect-square gap-100 max-w-6xl rounded-3xl overflow-hidden transform hover:scale-105 transition-all duration-300 shadow-xl shadow-purple-900/50 hover:shadow-2xl hover:shadow-cyan-500/50 border-2 border-purple-500/30 hover:border-cyan-400/50"
                 >
-                  <div className={`absolute inset-0 bg-gradient-to-br ${game.color} opacity-70 group-hover:opacity-90 transition-opacity`} />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-center space-y-4 p-6">
-                      <Zap className="w-16 h-16 mx-auto text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]" />
-                      <h3 className="text-2xl font-bold text-white drop-shadow-lg">
+                  {/* รูปภาพเกม */}
+                  <img 
+                    src={game.image} 
+                    alt={game.name}
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    onError={(e) => {
+                      // ถ้าโหลดรูปไม่สำเร็จ จะแสดง fallback
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'flex';
+                    }}
+                  />
+                  {/* Fallback ถ้ารูปโหลดไม่ได้ */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${game.color} hidden items-center justify-center`}>
+                    <Zap className="w-16 h-16 text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]" />
+                  </div>
+                  {/* Gradient overlay */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${game.color} opacity-30 group-hover:opacity-50 transition-opacity mix-blend-overlay`} />
+                  {/* Dark gradient at bottom for text readability */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/95 via-slate-900/40 to-transparent" />
+                  {/* Title overlay */}
+                  <div className="absolute inset-0 flex items-end justify-center pb-16">
+                    <div className="text-center space-y-2 px-6">
+                      <h3 className="text-2xl md:text-3xl font-bold text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
                         {game.name}
                       </h3>
                     </div>
                   </div>
-                  <div className="absolute bottom-0 left-0 right-0 bg-slate-900/80 backdrop-blur-sm py-3 border-t border-purple-500/30">
-                    <p className="text-cyan-300 font-bold">HOYOVERSE</p>
+                  {/* HOYOVERSE badge */}
+                  <div className="absolute bottom-0 left-0 right-0 bg-slate-900/95 backdrop-blur-sm py-3 border-t-2 border-cyan-400/30 group-hover:border-cyan-400/60 transition-colors">
+                    <p className="text-cyan-300 font-bold tracking-wider">HOYOVERSE</p>
                   </div>
                 </button>
               ))}
             </div>
+
+            <button
+              onClick={resetApp}
+              className="mt-8 px-6 py-2 bg-slate-800/50 backdrop-blur-sm border border-purple-500/50 rounded-full text-purple-300 font-medium hover:bg-slate-700/50 hover:border-cyan-400/50 hover:text-cyan-300 transition-all"
+            >
+              ← กลับไปเปลี่ยนวันเกิด
+            </button>
           </div>
         )}
 
