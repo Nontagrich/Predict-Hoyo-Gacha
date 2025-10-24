@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, Sparkles, Star, AlertCircle } from 'lucide-react';
+import { Calendar, Sparkles, Star, AlertCircle, Heart } from 'lucide-react';
 
 export default function HoyoGachaFortune() {
   const [step, setStep] = useState(1);
@@ -13,17 +13,17 @@ export default function HoyoGachaFortune() {
     { 
       id: 'genshin', 
       name: 'Genshin Impact', 
-      color: 'from-blue-400 to-purple-500'
+      color: 'from-pink-300 to-rose-400'
     },
     { 
       id: 'starrail', 
       name: 'Honkai: Star Rail', 
-      color: 'from-yellow-400 to-pink-500'
+      color: 'from-pink-400 to-fuchsia-400'
     },
     { 
       id: 'zzz', 
       name: 'Zenless Zone Zero', 
-      color: 'from-orange-400 to-red-500'
+      color: 'from-rose-400 to-pink-500'
     }
   ];
 
@@ -38,7 +38,6 @@ export default function HoyoGachaFortune() {
         throw new Error(`Game with id "${gameId}" not found.`);
       }
 
-      // ✅ ไม่ต้องส่ง currentBanners - ให้ API ดึงเอง
       const response = await fetch('/api/generate-fortune', {
         method: 'POST',
         headers: {
@@ -96,29 +95,33 @@ export default function HoyoGachaFortune() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative overflow-hidden">
-      {/* Animated stars background */}
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-rose-50 to-white relative overflow-hidden">
+      {/* Animated hearts and sparkles background */}
       <div className="absolute inset-0 overflow-hidden">
-        {[...Array(50)].map((_, i) => (
+        {[...Array(30)].map((_, i) => (
           <div
             key={i}
-            className="absolute bg-white rounded-full animate-pulse"
+            className="absolute animate-pulse"
             style={{
-              width: Math.random() * 3 + 1 + 'px',
-              height: Math.random() * 3 + 1 + 'px',
               top: Math.random() * 100 + '%',
               left: Math.random() * 100 + '%',
               animationDelay: Math.random() * 3 + 's',
               animationDuration: Math.random() * 3 + 2 + 's'
             }}
-          />
+          >
+            {i % 2 === 0 ? (
+              <Heart className="w-4 h-4 text-pink-300/40" fill="currentColor" />
+            ) : (
+              <Sparkles className="w-3 h-3 text-rose-300/40" />
+            )}
+          </div>
         ))}
       </div>
 
       <div className="relative z-10 min-h-screen flex items-center justify-center p-4">
         {/* Error Display */}
         {error && (
-          <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-red-500/90 backdrop-blur-md text-white px-6 py-3 rounded-lg flex items-center gap-2 shadow-lg z-50">
+          <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-rose-500 text-white px-6 py-3 rounded-full flex items-center gap-2 shadow-lg z-50">
             <AlertCircle className="w-5 h-5" />
             {error}
           </div>
@@ -128,17 +131,20 @@ export default function HoyoGachaFortune() {
         {step === 1 && (
           <div className="text-center space-y-8">
             <div className="space-y-4">
-              <h1 className="text-6xl md:text-8xl font-bold text-white tracking-wider">
+              <div className="flex justify-center mb-6">
+                <Sparkles className="w-16 h-16 text-pink-400 animate-pulse" />
+              </div>
+              <h1 className="text-6xl md:text-8xl font-bold bg-gradient-to-r from-pink-500 to-rose-500 bg-clip-text text-transparent tracking-wider">
                 LET&apos;S MOO
               </h1>
-              <h1 className="text-6xl md:text-8xl font-bold text-white tracking-wider">
+              <h1 className="text-6xl md:text-8xl font-bold bg-gradient-to-r from-rose-500 to-pink-500 bg-clip-text text-transparent tracking-wider">
                 TOGETHER
               </h1>
             </div>
             
             <div className="mt-12 space-y-6">
               <div className="max-w-md mx-auto">
-                <label className="block text-white/80 text-sm mb-2">
+                <label className="block text-pink-700 text-sm mb-2 font-medium">
                   กรุณาเลือกวันเกิดของคุณ
                 </label>
                 <input
@@ -146,20 +152,20 @@ export default function HoyoGachaFortune() {
                   value={birthDate}
                   onChange={(e) => setBirthDate(e.target.value)}
                   max={new Date().toISOString().split('T')[0]}
-                  className="w-full px-6 py-4 text-xl text-center bg-white/10 backdrop-blur-md border-2 border-white/30 rounded-lg text-white focus:outline-none focus:border-white/60 transition-all"
+                  className="w-full px-6 py-4 text-xl text-center bg-white border-2 border-pink-200 rounded-2xl text-pink-900 focus:outline-none focus:border-pink-400 transition-all shadow-lg hover:shadow-xl"
                 />
               </div>
               
               <button
                 onClick={handleDateSubmit}
                 disabled={!birthDate}
-                className="px-8 py-3 bg-white/20 backdrop-blur-md border-2 border-white/40 rounded-lg text-white font-semibold hover:bg-white/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-8 py-3 bg-gradient-to-r from-pink-400 to-rose-400 rounded-full text-white font-semibold hover:from-pink-500 hover:to-rose-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:scale-105"
               >
                 ดำเนินการต่อ
               </button>
             </div>
 
-            <p className="text-white/70 text-sm mt-8 max-w-2xl mx-auto">
+            <p className="text-pink-600/70 text-sm mt-8 max-w-2xl mx-auto bg-white/50 backdrop-blur-sm rounded-2xl p-4">
               ⚠️ DISCLAIMER: เว็บไซต์นี้ทำเพื่อความบันเทิงเท่านั้น ไม่ใช่การพยากรณ์จริง ไม่รับประกันผลลัพธ์
             </p>
           </div>
@@ -168,7 +174,7 @@ export default function HoyoGachaFortune() {
         {/* Step 2: Choose Game */}
         {step === 2 && !loading && (
           <div className="text-center space-y-12">
-            <h2 className="text-5xl md:text-7xl font-bold text-white tracking-wider">
+            <h2 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-pink-500 to-rose-500 bg-clip-text text-transparent tracking-wider">
               เลือกเกมของคุณ
             </h2>
 
@@ -177,7 +183,7 @@ export default function HoyoGachaFortune() {
                 <button
                   key={game.id}
                   onClick={() => handleGameSelect(game.id)}
-                  className="group relative aspect-square rounded-2xl overflow-hidden transform hover:scale-105 transition-all duration-300"
+                  className="group relative aspect-square rounded-3xl overflow-hidden transform hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl bg-white"
                 >
                   <div className={`absolute inset-0 bg-gradient-to-br ${game.color} opacity-90 group-hover:opacity-100 transition-opacity`} />
                   <div className="absolute inset-0 flex items-center justify-center">
@@ -188,8 +194,8 @@ export default function HoyoGachaFortune() {
                       </h3>
                     </div>
                   </div>
-                  <div className="absolute bottom-0 left-0 right-0 bg-black/50 backdrop-blur-sm py-3">
-                    <p className="text-white font-semibold">HOYOVERSE</p>
+                  <div className="absolute bottom-0 left-0 right-0 bg-white/90 backdrop-blur-sm py-3">
+                    <p className="text-pink-600 font-bold">HOYOVERSE</p>
                   </div>
                 </button>
               ))}
@@ -201,12 +207,12 @@ export default function HoyoGachaFortune() {
         {loading && (
           <div className="text-center space-y-6">
             <div className="relative">
-              <Sparkles className="w-24 h-24 text-white mx-auto animate-spin" />
+              <Sparkles className="w-24 h-24 text-pink-400 mx-auto animate-spin" />
             </div>
-            <h3 className="text-3xl font-bold text-white">
+            <h3 className="text-3xl font-bold text-pink-600">
               กำลังคำนวณดวงชะตาของคุณ...
             </h3>
-            <p className="text-white/70">ดาวดวงต่างๆ กำลังเรียงตัว ✨</p>
+            <p className="text-pink-500">ดาวดวงต่างๆ กำลังเรียงตัว ✨</p>
           </div>
         )}
 
@@ -214,13 +220,12 @@ export default function HoyoGachaFortune() {
         {step === 3 && fortune && (
           <div className="max-w-4xl w-full space-y-6">
             <div className="text-center mb-8">
-              <h2 className="text-5xl font-bold text-white mb-2">
+              <h2 className="text-5xl font-bold bg-gradient-to-r from-pink-500 to-rose-500 bg-clip-text text-transparent mb-2">
                 ตารางโชคลาภของคุณ
               </h2>
-              <p className="text-white/70">สำหรับ {games.find(g => g.id === selectedGame)?.name}</p>
-              {/* ✅ แสดง current banners ที่ดึงมาจาก API */}
+              <p className="text-pink-600">สำหรับ {games.find(g => g.id === selectedGame)?.name}</p>
               {fortune.currentBanners && (
-                <p className="text-white/60 text-sm mt-2">
+                <p className="text-pink-500 text-sm mt-2">
                   🎯 Current Banners: {fortune.currentBanners.join(', ')}
                 </p>
               )}
@@ -228,25 +233,25 @@ export default function HoyoGachaFortune() {
 
             {/* Lucky Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
+              <div className="bg-white rounded-2xl p-6 border-2 border-pink-200 shadow-lg hover:shadow-xl transition-all">
                 <div className="text-center">
-                  <Star className="w-8 h-8 text-yellow-400 mx-auto mb-2" />
-                  <h4 className="text-white/70 text-sm mb-1">องค์ประกอบมงคล</h4>
-                  <p className="text-2xl font-bold text-white">{fortune.element}</p>
+                  <Star className="w-8 h-8 text-pink-400 mx-auto mb-2" />
+                  <h4 className="text-pink-600 text-sm mb-1 font-medium">องค์ประกอบมงคล</h4>
+                  <p className="text-2xl font-bold text-pink-700">{fortune.element}</p>
                 </div>
               </div>
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
+              <div className="bg-white rounded-2xl p-6 border-2 border-pink-200 shadow-lg hover:shadow-xl transition-all">
                 <div className="text-center">
-                  <Sparkles className="w-8 h-8 text-pink-400 mx-auto mb-2" />
-                  <h4 className="text-white/70 text-sm mb-1">เลขนำโชค</h4>
-                  <p className="text-2xl font-bold text-white">{fortune.luckyNumber}</p>
+                  <Sparkles className="w-8 h-8 text-rose-400 mx-auto mb-2" />
+                  <h4 className="text-pink-600 text-sm mb-1 font-medium">เลขนำโชค</h4>
+                  <p className="text-2xl font-bold text-pink-700">{fortune.luckyNumber}</p>
                 </div>
               </div>
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
+              <div className="bg-white rounded-2xl p-6 border-2 border-pink-200 shadow-lg hover:shadow-xl transition-all">
                 <div className="text-center">
-                  <Calendar className="w-8 h-8 text-blue-400 mx-auto mb-2" />
-                  <h4 className="text-white/70 text-sm mb-1">วันเกิด</h4>
-                  <p className="text-lg font-bold text-white">
+                  <Calendar className="w-8 h-8 text-pink-400 mx-auto mb-2" />
+                  <h4 className="text-pink-600 text-sm mb-1 font-medium">วันเกิด</h4>
+                  <p className="text-lg font-bold text-pink-700">
                     {new Date(birthDate).toLocaleDateString('th-TH')}
                   </p>
                 </div>
@@ -255,28 +260,28 @@ export default function HoyoGachaFortune() {
 
             {/* Weekly Prediction */}
             {fortune.weeklyPrediction && (
-              <div className="bg-gradient-to-r from-blue-500/20 to-cyan-500/20 backdrop-blur-md rounded-xl p-6 border border-white/20">
-                <h4 className="text-xl font-bold text-white mb-2">โชคลาภประจำสัปดาห์</h4>
-                <p className="text-white/80">{fortune.weeklyPrediction}</p>
+              <div className="bg-gradient-to-r from-pink-100 to-rose-100 rounded-2xl p-6 border-2 border-pink-200 shadow-lg">
+                <h4 className="text-xl font-bold text-pink-700 mb-2">โชคลาภประจำสัปดาห์</h4>
+                <p className="text-pink-600">{fortune.weeklyPrediction}</p>
               </div>
             )}
 
             {/* Lucky Days */}
-            <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
-              <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
-                <Star className="text-yellow-400" />
+            <div className="bg-white rounded-2xl p-6 border-2 border-pink-200 shadow-lg">
+              <h3 className="text-2xl font-bold text-pink-700 mb-4 flex items-center gap-2">
+                <Star className="text-pink-400" fill="currentColor" />
                 วันและเวลาแนะนำสำหรับกดกาชา
               </h3>
               <div className="space-y-3">
                 {fortune.luckyDays.map((day, idx) => (
                   <div
                     key={idx}
-                    className="bg-white/5 rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-all"
+                    className="bg-pink-50 rounded-xl p-4 border-2 border-pink-100 hover:border-pink-300 hover:bg-pink-100 transition-all"
                   >
                     <div className="flex justify-between items-start gap-4">
                       <div className="flex-1">
-                        <p className="text-white font-semibold text-lg mb-1">{day.character}</p>
-                        <p className="text-white/60 text-sm">
+                        <p className="text-pink-700 font-semibold text-lg mb-1">{day.character}</p>
+                        <p className="text-pink-600 text-sm">
                           {new Date(day.date).toLocaleDateString('th-TH', { 
                             weekday: 'long', 
                             year: 'numeric', 
@@ -284,14 +289,14 @@ export default function HoyoGachaFortune() {
                             day: 'numeric' 
                           })}
                         </p>
-                        <p className="text-white/60 text-sm mb-2">🕐 {day.time}</p>
+                        <p className="text-pink-600 text-sm mb-2">🕐 {day.time}</p>
                         {day.reason && (
-                          <p className="text-white/70 text-sm italic">💫 {day.reason}</p>
+                          <p className="text-pink-500 text-sm italic">💫 {day.reason}</p>
                         )}
                       </div>
                       <div className="text-right">
-                        <div className="text-3xl font-bold text-yellow-400">{day.luck}%</div>
-                        <div className="text-white/60 text-xs">โชคลาภ</div>
+                        <div className="text-3xl font-bold text-pink-500">{day.luck}%</div>
+                        <div className="text-pink-400 text-xs">โชคลาภ</div>
                       </div>
                     </div>
                   </div>
@@ -300,16 +305,16 @@ export default function HoyoGachaFortune() {
             </div>
 
             {/* Advice */}
-            <div className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-md rounded-xl p-6 border border-white/20">
-              <h4 className="text-xl font-bold text-white mb-2">🌟 คำแนะนำจากดวงดาว</h4>
-              <p className="text-white/80">{fortune.advice}</p>
+            <div className="bg-gradient-to-r from-rose-100 to-pink-100 rounded-2xl p-6 border-2 border-pink-200 shadow-lg">
+              <h4 className="text-xl font-bold text-pink-700 mb-2">🌟 คำแนะนำจากดวงดาว</h4>
+              <p className="text-pink-600">{fortune.advice}</p>
             </div>
 
             {/* Reset Button */}
             <div className="text-center mt-8">
               <button
                 onClick={resetApp}
-                className="px-8 py-3 bg-white/20 backdrop-blur-md border-2 border-white/40 rounded-lg text-white font-semibold hover:bg-white/30 transition-all"
+                className="px-8 py-3 bg-gradient-to-r from-pink-400 to-rose-400 rounded-full text-white font-semibold hover:from-pink-500 hover:to-rose-500 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
               >
                 ทำนายใหม่อีกครั้ง
               </button>
