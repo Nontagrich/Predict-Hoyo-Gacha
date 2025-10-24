@@ -191,7 +191,7 @@ export default function HoyoGachaFortune() {
                 <button
                   key={game.id}
                   onClick={() => handleGameSelect(game.id)}
-                  className="group relative w-80 aspect-square gap-100 max-w-6xl rounded-3xl overflow-hidden transform hover:scale-105 transition-all duration-300 shadow-xl shadow-purple-900/50 hover:shadow-2xl hover:shadow-cyan-500/50 border-2 border-purple-500/30 hover:border-cyan-400/50"
+                  className="group relative w-60 aspect-square gap-100 max-w-6xl rounded-3xl overflow-hidden transform hover:scale-105 transition-all duration-300 shadow-xl shadow-purple-900/50 hover:shadow-2xl hover:shadow-cyan-500/50 border-2 border-purple-500/30 hover:border-cyan-400/50"
                 >
                   {/* รูปภาพเกม */}
                   <img 
